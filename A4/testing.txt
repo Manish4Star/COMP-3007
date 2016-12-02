@@ -1,0 +1,391 @@
+Muhammad Mustafa
+100823576
+COMP 3007 - ASSIGNMENT#4 : TESTING
+
+*****************************************************************
+Question 1: Using the family tree database of facts and relations
+*****************************************************************
+1 ?-  different(mustafa,awais).
+true.
+
+2 ?- is_mother(rabeeha).
+true
+
+3 ?- is_mother(saleha).
+true.
+
+4 ?- is_father(sabir).
+true.
+
+5 ?- aunt(raiha,mustafa).
+true.
+
+6 ?- aunt(rabeeha,mustafa).
+false.
+
+7 ?- uncle(safee,mustafa).
+true.
+
+8 ?- sister(raiha,rasheeda).
+true.
+
+9 ?- sister(safee,rabeeha).
+false.
+
+10 ?- sister(rabeeha,safee).
+true.
+
+11 ?- brother(mustafa,awais).
+true.
+
+12 ?- brother(awais,mustafa).
+true.
+
+13 ?- grandfather(idrees,mustafa).
+true.
+
+14 ?- grandmother(saleha,awais).
+true.
+
+15 ?- ancestor(X,mustafa).
+X = sabir ;
+X = rabeeha ;
+X = saleha.
+
+16 ?- ancestor(X,safee).
+X = saleha ;
+X = idrees.
+
+**************
+QUESTION 2: 
+**************
+
+a) What movies were released in or after 2003?
+
+?- movie(year(X),Title,_), X>2002.
+
+exp = pirates of the carribean
+         the imitation game
+	 the hunger games
+result = 
+X = 2003,
+Title = title([pirates, of, the, carribean]) ;
+X = 2014,
+Title = title([the, imitation, game]) ;
+X = 2012,
+Title = title([the, hunger, games]).
+   
+
+b) What movie(s) contain the word "of" in the title?
+
+?- movie(_,title(X),_),member(of,X).
+
+exp = pirates of the carribean
+         lord of the rings
+result = 
+X = [pirates, of, the, carribean] ;
+X = [lord, of, the, rings] ;
+
+c) What movies share one or more common words in their titles?
+
+?- movie(_,title(X1),_),movie(_,title(X2),_),member(Y,X1),member(Y,X2),X1\=X2. 
+
+exp = ("pirates of the carribean" and "lord of the rings")
+         ("pirates of the carribean" and "the imitation game"), 
+         ("pirates of the carribean" and "the hunger games"),
+         ("lord of the rings" and "the imitation game"), 
+         ("lord of the rings" and "the hunger games").
+result =
+X1 = [pirates, of, the, carribean],
+X2 = [lord, of, the, rings],
+Y = of ;
+X1 = [pirates, of, the, carribean],
+X2 = [lord, of, the, rings],
+Y = the ;
+X1 = [pirates, of, the, carribean],
+X2 = [the, imitation, game],
+Y = the ;
+X1 = [pirates, of, the, carribean],
+X2 = [the, hunger, games],
+Y = the ;
+X1 = [lord, of, the, rings],
+X2 = [pirates, of, the, carribean],
+Y = of ;
+X1 = [lord, of, the, rings],
+X2 = [pirates, of, the, carribean],
+Y = the ;
+X1 = [lord, of, the, rings],
+X2 = [the, imitation, game],
+Y = the ;
+X1 = [lord, of, the, rings],
+X2 = [the, hunger, games],
+Y = the ;
+X1 = [the, imitation, game],
+X2 = [pirates, of, the, carribean],
+Y = the ;
+X1 = [the, imitation, game],
+X2 = [lord, of, the, rings],
+Y = the ;
+X1 = [the, imitation, game],
+X2 = [the, hunger, games],
+Y = the ;
+X1 = [the, hunger, games],
+X2 = [pirates, of, the, carribean],
+Y = the ;
+X1 = [the, hunger, games],
+X2 = [lord, of, the, rings],
+Y = the ;
+X1 = [the, hunger, games],
+X2 = [the, imitation, game],
+Y = the ;
+
+d) What are the names of the female actors?
+
+?- actor(X,Y,gender(female)).
+
+exp = glenn close
+         jennifer lawrence
+	 angelina jolie
+	 keira knightley.
+result = 
+X = glenn,
+Y = close ;
+X = jennifer,
+Y = lawrence ;
+X = angelina,
+Y = jolie ;
+X = keira,
+Y = knightley ;
+
+e) In what movies were female actors members of the cast?
+
+?- movie(_,Title,cast(X)),member(actor(Y,Z),X),actor(Y,Z,gender(female)).
+
+exp = pirates of the carribean
+         the imitation game
+	 the hunger games
+result =
+Title = title([pirates, of, the, carribean]),
+X = [actor(jonny, depp), actor(keira, knightley), actor(orlando, bloom)],
+Y = keira,
+Z = knightley ;
+Title = title([the, imitation, game]),
+X = [actor(benedict, cumberbatch), actor(keira, knightley)],
+Y = keira,
+Z = knightley ;
+Title = title([the, hunger, games]),
+X = [actor(jennifer, lawrence)],
+Y = jennifer,
+Z = lawrence.
+
+f) In what movies is Orlando Bloom a member of the cast?
+
+?- movie(_,Title,cast(X)),member(actor(orlando, bloom),X).
+
+exp = pirates of the carribean
+         lord of the rings
+result =
+Title = title([pirates, of, the, carribean]),
+X = [actor(jonny, depp), actor(keira, knightley), actor(orlando, bloom)] ;
+Title = title([lord, of, the, rings]),
+X = [actor(orlando, bloom), actor(sean, bean)] ;
+
+g) What actor(s) are in the cast of more than 1 movie?
+
+?- movie(_,Title1,cast(L1)),!,movie(_,Title2,cast(L2)),member(actor(X,Y),L1),member(actor(X,Y),L2),Title1\=Title2.
+
+exp = keira knightley
+         orlando bloom.
+result = 
+Title1 = title([pirates, of, the, carribean]),
+L1 = [actor(jonny, depp), actor(keira, knightley), actor(orlando, bloom)],
+Title2 = title([lord, of, the, rings]),
+L2 = [actor(orlando, bloom), actor(sean, bean)],
+X = orlando,
+Y = bloom ;
+Title1 = title([pirates, of, the, carribean]),
+L1 = [actor(jonny, depp), actor(keira, knightley), actor(orlando, bloom)],
+Title2 = title([the, imitation, game]),
+L2 = [actor(benedict, cumberbatch), actor(keira, knightley)],
+X = keira,
+Y = knightley ;
+
+h) What actor(s) are not in the cast of any movie?
+
+?- actor(X,Y,_),movie(_,title([pirates,of,the,carribean]),cast(L1)),movie(_,title([lord,of,the,rings]),cast(L2)),movie(_,title([die,hard]),cast(L3)),movie(_,title([the,imitation,game]),cast(L4)),movie(_,title([the,hunger,games]),cast(L5)),not(member(actor(X,Y), L1)),not(member(actor(X,Y),L2)),not(member(actor(X,Y),L3)),not(member(actor(X,Y),L4)),not(member(actor(X,Y),L5)).
+
+exp = glenn close
+         angelina jolie.
+result = 
+X = glenn,
+Y = close,
+L1 = [actor(jonny, depp), actor(keira, knightley), actor(orlando, bloom)],
+L2 = [actor(orlando, bloom), actor(sean, bean)],
+L3 = [actor(bruce, willis)],
+L4 = [actor(benedict, cumberbatch), actor(keira, knightley)],
+L5 = [actor(jennifer, lawrence)] ;
+X = angelina,
+Y = jolie,
+L1 = [actor(jonny, depp), actor(keira, knightley), actor(orlando, bloom)],
+L2 = [actor(orlando, bloom), actor(sean, bean)],
+L3 = [actor(bruce, willis)],
+L4 = [actor(benedict, cumberbatch), actor(keira, knightley)],
+L5 = [actor(jennifer, lawrence)] ;
+
+
+**************************************
+Question 3: Towers of Hanoi Problem
+**************************************
+
+hanoi(1,left,right,center).
+exp= l -> r.
+result = 
+?- hanoi(1,left,right,center).
+Move upper most disk from left to right
+true 
+
+hanoi(2,left,right,center).
+exp = l ->c, l -> r, c - >r.
+result = 
+?- hanoi(2,left,right,center).
+Move upper most disk from left to center
+Move upper most disk from left to right
+Move upper most disk from center to right
+true 
+
+hanoi(3,left,right,center).
+exp = l -> r, l -> c, r -> c, l -> r, c -> l, c -> r, l ->r.
+result = 
+?- hanoi(3,left,right,center).
+Move upper most disk from left to right
+Move upper most disk from left to center
+Move upper most disk from right to center
+Move upper most disk from left to right
+Move upper most disk from center to left
+Move upper most disk from center to right
+Move upper most disk from left to right
+true 
+
+
+*************
+Question 4:
+*************
+a)Write a predicate to find the last element of a list. You may not use the built in last predicate in your answer.
+?- mylast(X,[how,are,you,today]).
+exp: X=today
+result: X=today.
+
+?- mylast(X,[my,name,is,mustafa]).
+exp: X = mustafa ;
+result: X = mustafa.
+
+b)Write a predicate after(X,List,Result) that returns everything in a list after any occurrence of the given element X.
+?- after(a,[b,a,x,d,a,f,g],R).
+R = [x, d, a, f, g] ;
+R = [f, g] ;
+
+
+?- after(c,[c,f,g,r,t,x,c,g,c,g],R).
+R = [f, g, r, t, x, c, g, c, g] ;
+R = [g, c, g] ;
+R = [g] ;
+
+c)Write a predicate nextto(X, Y, L), that succeeds when elements X and Y are immediately consecutive elements of a list L.
+?- nextto(a,b,[c,a,b,d]).
+true.
+
+?- nextto(a,b,[c,b,a,d]).
+false.
+
+?- nextto(g,h,[k,l,m,g,l,h]).
+false.
+
+?- nextto(g,h,[k,l,m,g,h,h]).
+true.
+
+d) Write the predicate occurs_at_position(Element, List, Position), that allows access to the nth element in a list.
+?- occurs_at_position(x, [a,b,c,x,x,d,e], 4).
+true.
+
+?- occurs_at_position(x, [a,b,c,x,x,d,e],Pos).
+Pos = 3;
+Pos = 4.
+
+?- occurs_at_position(X, [a,b,c,x,x,d,e],2).
+X = c.
+
+?- occurs_at_position(d, [a,c,g,t,f,d,e],5).
+true.
+
+?- occurs_at_position(d, [a,c,g,t,f,d,e],Pos).
+Pos = 5.
+
+?- occurs_at_position(D, [a,c,g,t,f,d,e],5).
+D = d.
+
+
+**************
+Question 5:
+**************
+a) Write a predicate myAppend(L1,L2,L3) to append 2 lists (order is important, you may not use the built in append).
+?- myAppend([a,b],[c,d],L).
+L = [a,b,c,d].
+
+?- myAppend([mustafa,awais,cat],[jesus,muhammad,allah],Newlist).
+Newlist = [mustafa, awais, cat, jesus, muhammad, allah].
+
+b) Rewrite the predicate myLast(X,L) from the previous question using append.
+?- myLast(Last, [my,name,is,mustafa]).
+Last = [my, name, is, mustafa] ;
+Last = [name, is, mustafa] ;
+Last = [is, mustafa] ;
+Last = [mustafa] ;
+Last = [] 
+
+?- myLast(Last, [mustafa]).
+Last = [mustafa] .
+
+C) Rewrite the predicate nextto(X,Y,L) from the previous question using append.
+?- nextto(a,b,[c,a,b,d]).
+true.
+
+?- nextto(a,b,[c,b,a,d]).
+false.
+
+?- nextto(g,h,[k,l,m,g,l,h]).
+false.
+
+?- nextto(g,h,[k,l,m,g,h,h]).
+true.
+
+d) Write a predicate myReverse(L1,L2) that succeeds when the result of reversing the elements of list L1 is the list L2. Your answer should use append, and may not make use of the built in reverse predicate.
+?- myReverse([mustafa,awais,cat],[jesus,muhammad,allah]).
+false.
+
+?- myReverse([mustafa,awais,cat],[cat,awais,mustafa]).
+true.
+
+
+**************************************************************************************
+Question 6:  Suppose we represent a directed graph by an edge relation:
+
+edge(X,Y,L) %the edge from X to Y is of length L.
+Therefore, a graph that looks like a square of size 2 can be defined as follows:
+edge(a,b,2).
+edge(b,c,2).
+edge(c,d,2).
+edge(a,d,2).
+***************************************************************************************
+a) Write and test the clauses for the relation:
+connected(X,Y) %there is a path from X to Y in the graph.
+?- connected(a,c).
+true.
+
+b)Write and test the clauses for the relation:
+pathLength(X,Y,R) %the length of the path from X to Y is R
+
+?- pathLength(a,d,R).
+R = 2 ;
+R = 6 .
+
+
